@@ -33,7 +33,8 @@ class VisiteurController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $data=$request->validate([
+            'cni'=>'required',
             'nom'=>'required',
             'prenom'=>'required',
             'date'=>'required',
@@ -42,19 +43,9 @@ class VisiteurController extends Controller
             'locataire_id'=>'required|exists:locataires,id',
         ]);
         $data ['user_id']=auth()->id();
-        //
-        Visiteur::create([
-
-            'cni'=>$request->cni,
-            'nom'=>$request->nom,
-            'prenom'=>$request->prenom,
-            'date'=>$request->date,
-            'heure_arrive'=>now()->format('H:i'),
-            'motif'=>$request->motif,
-            'user_id'=>auth()->id(),
-            'locataire_id'=>$request->locataire_id,
-
-        ]);
+        $data['heure_arrive'] = now()->format('H:i');
+        
+        Visiteur::create($data);
         return redirect()->route('visiteurs.create')->with('success','Visiteur enrégistré avec succès');
     }
 

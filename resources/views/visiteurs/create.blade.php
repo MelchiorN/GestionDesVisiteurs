@@ -25,12 +25,6 @@
             </div>
         </div>
     @endif
-
-    <!-- Message succès -->
-    @if(session('success'))
-        <script>alert("{{ session('success') }}");</script>
-    @endif
-
     <!-- Formulaire -->
     <form method="POST" action="{{ route('visiteurs.store') }}" class="grid grid-cols-1 md:grid-cols-2 gap-6">
         @csrf
