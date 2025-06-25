@@ -3,16 +3,12 @@
 @section('title', 'Connexion Agent')
 
 @section('content')
-<div class="min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="backdrop-blur-md bg-white/30 rounded-xl shadow-xl max-w-md w-full p-8 space-y-8">
-        
-        <!-- Logo (image distante) -->
-        <div class="text-center">
-            <!-- <img class="mx-auto h-16 w-auto" src="'}}" alt="Logo"> -->
+<div class="min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 ">
+    <div class="backdrop-blur-m bg-white/30 rounded-xl shadow-xl max-w-md w-full p-8 space-y-8">
+            <div class="text-center">
             <h2 class="mt-6 text-3xl font-extrabold text-gray-900">Connexion Agent</h2>
             <p class="mt-2 text-sm text-gray-700">Système de gestion des visiteurs</p>
         </div>
-
         <!-- Erreurs -->
         @if($errors->any())
             <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
@@ -20,9 +16,7 @@
                                 {{ $error }}
                  @endforeach                                           
             </div>
-        @endif
-
-        <!-- Formulaire -->
+        @endif      
         <form class="space-y-6" method="POST" action="{{ route('login') }}">
             @csrf
             <div class="space-y-4">
@@ -39,7 +33,6 @@
                            placeholder="Mot de passe">
                 </div>
             </div>
-
             <div>
                 <button type="submit"
                         class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">

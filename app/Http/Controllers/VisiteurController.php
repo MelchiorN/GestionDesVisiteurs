@@ -80,27 +80,16 @@ class VisiteurController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    // public function update(Request $request,Visiteur $visiteur )
-    // {
-    //     $request->validate([  
-    //         'cni'=>'required',
-    //         'nom'=>'required',
-    //         'prenom'=>'required',
-    //         'date'=>'required',
-    //         'heure_arrive'=>'required',
-    //         'heure_depart'=>'nullabe',
-    //         'motif'=>'required',
-    //         'locataire_id'=>'required|exists:locatires,id',
-    //     ]);
-    //     $visiteur->update($request->all());
-    //     return redirect()->route('visiteurs.index')->with('success','Visiteur mis à jour avec succès');
-    //     
-    // }
+    public function update()
+    {
+        
+        
+    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy()
     {
         //
     }
