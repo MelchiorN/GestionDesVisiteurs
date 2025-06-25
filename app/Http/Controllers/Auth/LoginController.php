@@ -15,20 +15,18 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-        
-            'email' => 'required|email',
-            'password' => 'required',
+        $credentials=$request-> validate([
+            'email'=> 'required|email',
+            'password'=> 'required',
         ]);
-
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $request->session()->regenerate();
-            return redirect()->route('visiteurs.create');
+        if (Auth::attempt($credentials)){
+            return redirect()-> route('visiteurs.create');
         }
-
-        return back()->withErrors([
-            'email' => 'Identifiants incorrects.',
+        return back()-> withErrors([
+            'email'=> 'Email ou mot de passe incorrect'
         ]);
+
+        
     }
 
     public function logout(Request $request)
