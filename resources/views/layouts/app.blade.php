@@ -39,6 +39,33 @@
                             </svg>
                             Nouveau visiteur
                         </a>
+                        <a href="{{route('locataires.create')}}" class="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-indigo-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                            </svg>
+                            Nouveau locataire
+                        </a>
+                        <a href="{{route('locataires.index')}}" class="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                            
+                            Liste des locataires
+                        </a>
+                        @php
+                            // Nombre total de notifications non lues pour tous les locataires
+                            $notifCount = \App\Models\Locataire::with('unreadNotifications')->get()->sum(function($locataire) {
+                                return $locataire->unreadNotifications->count();
+                            });
+                        @endphp
+
+                        <a href="{{ route('locataires.index') }}" class="relative flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                            </svg>
+                            @if($notifCount > 0)
+                                <span class="absolute -top-1 -right-1 bg-red-600 text-white rounded-full text-xs px-2">{{ $notifCount }}</span>
+                            @endif
+                        </a>
+                        
                         <a href="{{route('visiteurs.presents')}}" class="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-500" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />

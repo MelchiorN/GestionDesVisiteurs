@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Locataire;
 use Illuminate\Http\Request;
 
 class LocataireController extends Controller
@@ -11,6 +12,8 @@ class LocataireController extends Controller
      */
     public function index()
     {
+        $locataires=Locataire::all();
+        return view('locataires.index', compact('locataires'));
         //
     }
 
@@ -19,6 +22,8 @@ class LocataireController extends Controller
      */
     public function create()
     {
+        return view('locataires.create');
+        
         //
     }
 
@@ -26,7 +31,20 @@ class LocataireController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
+
     {
+        $data=$request->validate(
+            [
+                'nom'=>'required',
+                'prenom'=>'required',
+                'email'=>'required',
+                'telephone'=>'required',
+                'numero_etage'=>'required',
+                'numero_chambre'=>'required',
+            ]
+            );
+        Locataire::create($data);
+        return redirect()->route('locataires.create')->with("succes",'Locataire enrégistrer avec succès');
         //
     }
 
@@ -35,6 +53,9 @@ class LocataireController extends Controller
      */
     public function show(string $id)
     {
+        $locataire=Locataire::with('visiteurs')->findOrFail($id);
+        // dd($locataire);
+        return view('locataires.show',compact('locataire'));
         //
     }
 

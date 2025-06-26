@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Visiteur;
 use App\Models\Locataire;
 use Illuminate\Http\Request;
+use App\Notifications\NouveauVisiteurNotification;
 
 class VisiteurController extends Controller
 {
@@ -45,8 +46,11 @@ class VisiteurController extends Controller
         $data ['user_id']=auth()->id();
         $data['heure_arrive'] = now()->format('H:i');
         
-        Visiteur::create($data);
+        $visiteur=Visiteur::create($data);
+        $locataire = \App\Models\Locataire::find($visiteur->locataire_id);
+        $locataire->notify(new NouveauVisiteurNotification($visiteur));
         return redirect()->route('visiteurs.create')->with('success','Visiteur enrégistré avec succès');
+         
     }
 
     /**
@@ -84,6 +88,8 @@ class VisiteurController extends Controller
     {
         //
     }
+
+    
     public function presents()
     {
        $visiteurs = Visiteur::with(['locataire', 'user'])->whereNull('heure_depart')->latest()->get();

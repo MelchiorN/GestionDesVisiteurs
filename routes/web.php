@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\VisiteurController;
 use App\Http\Controllers\LocataireController;
 use App\Models\Visiteur;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,22 @@ Route::middleware('auth')->group(function () {
     // Enregistrement du départ d'un visiteur
     Route::post('/visiteurs/{visiteur}/depart', [VisiteurController::class, 'enregisterDepart'])
          ->name('visiteurs.depart');
+
+    //Enregistrement des locataires de l'immeuble
+    Route::get('/locataires/index',[LocataireController::class,'index'])->name('locataires.index');
+    Route::get('/locataires/create',[LocataireController::class,'create'])->name('locataires.create');
+    Route::post('/locataires',[LocataireController::class,'store'])->name('locataires.store');
+
+
+    // Affiche informations d'un locateurs 
+    Route::get('/locataires/{locataire}',[LocataireController::class,'show'])->name('locataires.show');
+
+    
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{notification}/action', [NotificationController::class, 'action'])->name('notifications.action');
+    
+    
+
     
     
 });

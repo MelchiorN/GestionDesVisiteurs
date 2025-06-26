@@ -25,6 +25,7 @@
             </div>
         </div>
     @endif
+
     <!-- Formulaire -->
     <form method="POST" action="{{ route('visiteurs.store') }}" class="grid grid-cols-1 md:grid-cols-2 gap-6">
         @csrf
@@ -33,8 +34,8 @@
             <label for="cni" class="block text-sm font-semibold text-gray-700 mb-1">CNI</label>
             <div class="relative">
                 <input type="text" name="cni" id="cni" required
-                    class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-indigo-500 focus:outline-none"
-                    value="{{ old('cni') }}">
+                       class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-indigo-500 focus:outline-none"
+                       value="{{ old('cni') }}">
                 <span class="absolute left-3 top-2.5 text-gray-400">
                     <img src="https://cdn-icons-png.flaticon.com/512/3064/3064197.png" class="w-5 h-5">
                 </span>
@@ -75,18 +76,28 @@
                    class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:outline-none"
                    value="{{ old('motif') }}">
         </div>
+         <div class="md:col-span-2">
+            <label for="fichier" class="block text-sm font-semibold text-gray-700 mb-1">Fichier (optionnel)</label>
+            <input type="file" name="fichier" id="fichier"
+                class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:outline-none">
+        </div>
 
+        <!-- Locataire avec datalist -->
         <div class="md:col-span-2">
-            <label for="locataire_id" class="block text-sm font-semibold text-gray-700 mb-1">Locataire visité</label>
-            <select name="locataire_id" id="locataire_id" required
-                    class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:outline-none">
-                <option value="">Sélectionner un locataire</option>
+            <label for="locataire_nom" class="block text-sm font-semibold text-gray-700 mb-1">Locataire visité</label>
+            <input list="locataires" id="locataire_nom" name="locataire_nom"
+                   class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:outline-none"
+                   value="{{ old('locataire_nom') }}" required>
+
+            <datalist id="locataires">
                 @foreach ($locataires as $locataire)
-                    <option value="{{ $locataire->id }}" {{ old('locataire_id') == $locataire->id ? 'selected' : '' }}>
-                        {{ $locataire->nom }} {{ $locataire->prenom }} - Chambre {{ $locataire->numero_etage }}.{{ $locataire->numero_chambre }}
-                    </option>
+                    <option data-id="{{ $locataire->id }}"
+                            value="{{ $locataire->nom }} {{ $locataire->prenom }} - Chambre {{ $locataire->numero_etage }}.{{ $locataire->numero_chambre }}">
                 @endforeach
-            </select>
+            </datalist>
+
+            <!-- Champ caché pour l'ID -->
+            <input type="hidden" name="locataire_id" id="locataire_id" value="{{ old('locataire_id') }}">
         </div>
 
         <div class="md:col-span-2 flex justify-end mt-4">
@@ -99,13 +110,30 @@
     </form>
 </div>
 
-<!-- Script pour auto-remplir l'heure d’arrivée -->
+<!-- Scripts -->
 <script>
     window.addEventListener('DOMContentLoaded', () => {
+        // Auto-remplir l’heure d’arrivée
         const now = new Date();
         const heures = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
         document.getElementById('heure_arrive').value = `${heures}:${minutes}`;
+    });
+
+    // Correspondance nom → ID locataire
+    const datalist = document.getElementById('locataires');
+    const inputNom = document.getElementById('locataire_nom');
+    const inputId = document.getElementById('locataire_id');
+
+    inputNom.addEventListener('change', () => {
+        const options = datalist.options;
+        inputId.value = ''; // reset
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].value === inputNom.value) {
+                inputId.value = options[i].dataset.id;
+                break;
+            }
+        }
     });
 </script>
 @endsection
