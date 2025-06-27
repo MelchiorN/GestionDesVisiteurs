@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Locataire;
 use Illuminate\Http\Request;
+// use Illuminate\Http\Controllers\Storage;
+use Illuminate\Support\Facades\Storage;
 
 class LocataireController extends Controller
 {
@@ -41,6 +43,7 @@ class LocataireController extends Controller
                 'telephone'=>'required',
                 'numero_etage'=>'required',
                 'numero_chambre'=>'required',
+                'photo'=>'required',
             ]
             );
         Locataire::create($data);
@@ -62,24 +65,58 @@ class LocataireController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
+        $locataire = Locataire::findOrFail($id);
+        return view('locataires.edit', ['locataire' => $locataire]);
         //
+        // return view('locataires.edit');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+   
+
+public function update(Request $request, Locataire $locataire)
+{
+    $validated = $request->validate([
+        'nom' => 'required|string|max:255',
+        'prenom' => 'required|string|max:255',
+        'email' => 'required|email|unique:locataires,email,'.$locataire->id,
+        'telephone' => 'required|string|max:20',
+        'numero_etage' => 'required|string|max:10',
+        'numero_chambre' => 'required|string|max:10',
+        'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+    ]);
+
+    // Gestion de la photo
+    if ($request->hasFile('photo')) {
+        // Supprimer l'ancienne photo si elle existe
+        if ($locataire->photo && Storage::exists('public/'.$locataire->photo)) {
+            Storage::delete('public/'.$locataire->photo);
+        }
+        
+        // Enregistrer la nouvelle photo
+        $path = $request->file('photo')->store('locataires', 'public');
+        $validated['photo'] = $path;
+    } else {
+        // Conserver l'ancienne photo si aucune nouvelle n'est uploadée
+        $validated['photo'] = $locataire->photo;
     }
 
+    $locataire->update($validated);
+
+    return redirect()->route('locataires.index')
+        ->with('success', 'Locataire mis à jour avec succès');
+}
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Locataire $locataire)
     {
+        $locataire->delete();
+        return redirect()->route('locataires.index')->with('succes','Locataire supprimé avec succes');
         //
     }
 }

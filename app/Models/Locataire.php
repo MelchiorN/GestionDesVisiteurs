@@ -16,6 +16,7 @@ class Locataire extends Model
         'telephone',  
         'numero_etage',
         'numero_chambre',
+        'photo',
     ];
     public function visiteurs()
     {

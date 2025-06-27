@@ -27,7 +27,7 @@
     @endif
 
     <!-- Formulaire -->
-    <form method="POST" action="{{ route('locataires.store') }}" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <form method="POST" action="{{ route('locataires.store') }}" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6">
         @csrf
 
         <div>
@@ -40,6 +40,7 @@
                     <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="w-5 h-5">
                 </span>
             </div>
+            @error('nom') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
         </div>
 
         <div>
@@ -52,18 +53,20 @@
                     <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="w-5 h-5">
                 </span>
             </div>
+            @error('prenom') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
         </div>
 
         <div>
             <label for="email" class="block text-sm font-semibold text-gray-700 mb-1">Email</label>
             <div class="relative">
-                <input type="email" name="email" id="email"
+                <input type="email" name="email" id="email" required
                     class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-indigo-500 focus:outline-none"
                     value="{{ old('email') }}">
                 <span class="absolute left-3 top-2.5 text-gray-400">
                     <img src="https://cdn-icons-png.flaticon.com/512/3178/3178158.png" class="w-5 h-5">
                 </span>
             </div>
+            @error('email') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
         </div>
 
         <div>
@@ -76,6 +79,7 @@
                     <img src="https://cdn-icons-png.flaticon.com/512/126/126341.png" class="w-5 h-5">
                 </span>
             </div>
+            @error('telephone') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
         </div>
 
         <div>
@@ -88,6 +92,7 @@
                     <img src="https://cdn-icons-png.flaticon.com/512/619/619032.png" class="w-5 h-5">
                 </span>
             </div>
+            @error('numero_etage') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
         </div>
 
         <div>
@@ -100,6 +105,21 @@
                     <img src="https://cdn-icons-png.flaticon.com/512/619/619032.png" class="w-5 h-5">
                 </span>
             </div>
+            @error('numero_chambre') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+        </div>
+
+        <!-- Champ Photo -->
+        <div class="md:col-span-2">
+            <label for="photo" class="block text-sm font-semibold text-gray-700 mb-1">Photo du locataire</label>
+            <div class="relative">
+                <input type="file" name="photo" id="photo" accept="image/*"
+                    class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-indigo-500 focus:outline-none file:bg-indigo-100 file:border-none file:rounded file:px-3 file:py-1">
+                <span class="absolute left-3 top-2.5 text-gray-400">
+                    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="w-5 h-5">
+                </span>
+            </div>
+            @error('photo') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+            <p class="mt-1 text-xs text-gray-500">Formats acceptés: JPG, PNG, JPEG. Taille max: 2MB</p>
         </div>
 
         <div class="md:col-span-2 flex justify-end mt-4">

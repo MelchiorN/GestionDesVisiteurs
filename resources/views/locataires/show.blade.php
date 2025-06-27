@@ -22,6 +22,19 @@
                 <div class="text-gray-700 space-y-2">
                     <p><span class="font-semibold">Nom :</span> {{ $locataire->nom }}</p>
                     <p><span class="font-semibold">Prénom :</span> {{ $locataire->prenom }}</p>
+                    <p><span class="font-semibold">Photo: </span>
+                                @if($locataire->photo)
+                                    <img src="{{ asset('storage/' . $locataire->photo) }}" 
+                                         alt="Photo de {{ $locataire->prenom }} {{ $locataire->nom }}"
+                                         class="h-10 w-10 rounded-full object-cover">
+                                @else
+                                    <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                        </svg>
+                                    </div>
+                                @endif
+                           
                     <p>
                         <span class="font-semibold">Email :</span>
                         <a href="mailto:{{ $locataire->email }}" class="text-indigo-600 hover:underline">

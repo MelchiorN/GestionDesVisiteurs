@@ -3,32 +3,42 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Notification as NotificationModel;
+use App\Models\Locataire;
+use App\Models\Visiteur;
+use Illuminate\Support\Facades\DB;
 
 class NotificationController extends Controller
 {
-    //
-    public function index()
+    public function index(Locataire $locataire)
     {
-        $locataire = auth()->user()->locataire ?? null;
-        $notifications = $locataire ? $locataire->notifications : collect();
-        return view('notifications.index', compact('notifications'));
+        $notifications = $locataire->notifications()->latest()->paginate(10);
+        return view('locataires.notifications', compact('locataire', 'notifications'));
     }
 
     public function action(Request $request, $notificationId)
-{
-    $notification = auth()->user()->locataire->notifications()->findOrFail($notificationId);
+    {
+        $notification = NotificationModel::findOrFail($notificationId);
+        $locataire = Locataire::findOrFail($request->locataire_id);
+        $visiteur = Visiteur::findOrFail($notification->data['visiteur_id']);
 
-    $action = $request->input('action');
-    $message = $request->input('message');
+        DB::transaction(function () use ($request, $notification, $visiteur) {
+            // Marquer comme lu
+            $notification->markAsRead();
 
-    // Stocke la décision dans le champ data (ou crée un champ dédié si besoin)
-    $data = $notification->data;
-    $data['decision'] = $action;
-    $data['message'] = $message;
-    $notification->data = $data;
-    $notification->markAsRead();
-    $notification->save();
+            // Enregistrer l'action
+            $data = $notification->data;
+            $data['action'] = $request->action;
+            $data['message'] = $request->message;
+            $data['processed_at'] = now()->toDateTimeString();
+            $notification->data = $data;
+            $notification->save();
 
-    return redirect()->back()->with('success', 'Décision enregistrée.');
-}
-}
+            // Actions spécifiques
+            
+        });
+
+        return redirect()->back()
+               ->with('success', 'Action enregistrée avec succès');
+    }
+} 

@@ -84,8 +84,10 @@ class VisiteurController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy()
+    public function destroy(Visiteur $visiteur )
     {
+        $visiteur->delete();
+        return redirect()->route('visiteurs.filtre')->with('succes','visiteur supprimé avec succès');
         //
     }
 
@@ -129,5 +131,9 @@ class VisiteurController extends Controller
         'visiteurs' => $visiteurs,
         'statutSelectionne' => $request->statut ?? 'tous'
     ]);
+
+    $visiteur = Visiteur::findOrFail($notification->data['visiteur_id']);
+
 }
+
 }
