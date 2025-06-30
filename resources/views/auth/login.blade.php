@@ -1,36 +1,46 @@
 @extends('layouts.auth')
 
-@section('title', 'Connexion Agent')
+@section('title', 'Connexion')
 
 @section('content')
 <div class="min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 ">
     <div class="backdrop-blur-m bg-white/30 rounded-xl shadow-xl max-w-md w-full p-8 space-y-8">
-            <div class="text-center">
-            <h2 class="mt-6 text-3xl font-extrabold text-gray-900">Connexion Agent</h2>
+        <div class="text-center">
+            <h2 class="mt-6 text-3xl font-extrabold text-gray-900">Connexion</h2>
             <p class="mt-2 text-sm text-gray-700">Système de gestion des visiteurs</p>
         </div>
         <!-- Erreurs -->
         @if($errors->any())
             <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
-                 @foreach ($errors->all() as $error)
-                                {{ $error }}
-                 @endforeach                                           
+                @foreach ($errors->all() as $error)
+                    <p>{{ $error }}</p>
+                @endforeach                                           
             </div>
         @endif      
         <form class="space-y-6" method="POST" action="{{ route('login') }}">
             @csrf
             <div class="space-y-4">
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-900"></label>
+                    <label for="email" class="block text-sm font-medium text-gray-900">Email</label>
                     <input id="email" name="email" type="email" autocomplete="email" required
-                           class="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                           placeholder="Adresse email" value="{{ old('email') }}">
+                        class="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        placeholder="Adresse email" value="{{ old('email') }}">
                 </div>
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-900"></label>
+                    <label for="password" class="block text-sm font-medium text-gray-900">Mot de passe</label>
                     <input id="password" name="password" type="password" autocomplete="current-password" required
-                           class="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                           placeholder="Mot de passe">
+                        class="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        placeholder="Mot de passe">
+                </div>
+                <div>
+                    <label for="role" class="block text-sm font-medium text-gray-900">Type de connexion</label>
+                    <select id="role" name="role" required
+                        class="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <option value="" disabled selected>Choisir un type</option>
+                        <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                        <option value="agent" {{ old('role') == 'agent' ? 'selected' : '' }}>Agent</option>
+                        <option value="locataire" {{ old('role') == 'locataire' ? 'selected' : '' }}>Locataire</option>
+                    </select>
                 </div>
             </div>
             <div>

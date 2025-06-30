@@ -68,6 +68,24 @@
             </div>
             @error('email') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
         </div>
+         <div>
+            <label for="password" class="block text-sm font-semibold text-gray-700 mb-1">Mot de passe</label>
+            <div class="relative">
+                <input type="password" name="password" id="password" required class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-indigo-500 focus:outline-none"
+                    value="{{ old('password') }}">
+            </div>
+             @error('password') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+        </div>
+
+        <!-- Password Confirmation -->
+        <div>
+            <label for="password_confirmation" class="block text-sm font-semibold text-gray-700 mb-1">Confirmer le mot de passe</label>
+            <div class="relative">
+                <input type="password" name="password_confirmation" id="password_confirmation" required  class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-indigo-500 focus:outline-none"
+                    value="{{ old('password_confirmation') }}">
+            </div>
+             @error('password_confirmation') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+        </div>
 
         <div>
             <label for="telephone" class="block text-sm font-semibold text-gray-700 mb-1">Téléphone</label>
@@ -81,6 +99,21 @@
             </div>
             @error('telephone') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
         </div>
+        <!-- Champ Type de résident -->
+    <div>
+        <label for="type_resident" class="block text-sm font-semibold text-gray-700 mb-1">Type de résident</label>
+        <div class="relative">
+            <select name="type_resident" id="type_resident" required
+                    class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-indigo-500 focus:outline-none">
+                <option value="locataire" {{ old('type_resident') == 'locataire' ? 'selected' : '' }}>Locataire</option>
+                <option value="proprietaire" {{ old('type_resident') == 'proprietaire' ? 'selected' : '' }}>Propriétaire</option>
+            </select>
+            <span class="absolute left-3 top-2.5 text-gray-400">
+                <img src="https://cdn-icons-png.flaticon.com/512/565/565547.png" class="w-5 h-5">
+            </span>
+        </div>
+        @error('type_resident') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+    </div>
 
         <div>
             <label for="numero_etage" class="block text-sm font-semibold text-gray-700 mb-1">Numéro d'étage</label>

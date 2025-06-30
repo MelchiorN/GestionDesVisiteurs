@@ -9,12 +9,16 @@ class Visiteur extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'cni',
+        'type_carte',
+        'numero_carte',
+        'photo_carte',
         'nom',
         'prenom',
+        'photo_visiteur',
         'date',
         'heure_arrive',
         'heure_depart',
+        'statut',
         'motif',
         'user_id',
         'locataire_id',

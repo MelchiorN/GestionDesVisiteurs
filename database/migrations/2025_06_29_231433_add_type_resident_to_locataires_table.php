@@ -11,7 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('visiteurs', function (Blueprint $table) {
+        Schema::table('locataires', function (Blueprint $table) {
+              $table->string('email')->after('prenom');
+             $table->string('type_resident')->after('email');
+        
+                  
             //
         });
     }
@@ -21,7 +25,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('visiteurs', function (Blueprint $table) {
+        Schema::table('locataires', function (Blueprint $table) {
+             $table->dropColumn('type_resident');
+              $table->dropColumn('email');
             //
         });
     }

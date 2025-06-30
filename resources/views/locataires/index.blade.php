@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="max-w-6xl mx-auto mt-10 bg-white p-10 rounded-2xl shadow-xl">
-    <h1 class="text-3xl font-bold text-indigo-700 mb-8 text-center">Liste des locataires</h1>
+    <h1 class="text-3xl font-bold text-indigo-700 mb-8 text-center">Liste des Résidents</h1>
 
     <div class="overflow-x-auto">
         <table class="min-w-full border-separate border-spacing-y-2 text-sm">
@@ -15,6 +15,7 @@
                     <th class="bg-indigo-100 px-4 py-3">Prénom</th>
                     <th class="bg-indigo-100 px-4 py-3">Email</th>
                     <th class="bg-indigo-100 px-4 py-3">Téléphone</th>
+                    <th class="bg-indigo-100 px-4 py-3">Personnalité</th>
                     <th class="bg-indigo-100 px-4 py-3">Étage</th>
                     <th class="bg-indigo-100 px-4 py-3">Chambre</th>
                     <th class="bg-indigo-100 px-4 py-3 text-center">Notifications</th>
@@ -28,9 +29,11 @@
                         <td class="bg-white px-4 py-3 rounded-l-xl border border-gray-200">
                             <div class="flex justify-center">
                                 @if($locataire->photo)
-                                    <img src="{{ asset('storage/' . $locataire->photo) }}" 
-                                         alt="Photo de {{ $locataire->prenom }} {{ $locataire->nom }}"
-                                         class="h-10 w-10 rounded-full object-cover">
+                                     <a href="{{ route('locataires.photo', $locataire->id) }}" target="_blank">
+                                            <img src="{{ asset('storage/' . $locataire->photo) }}"
+                                         alt="Photo resident"
+                                         class="w-10 h-10 rounded-full mx-auto object-cover hover:scale-105 transition duration-200">
+                                        </a>
                                 @else
                                     <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -46,6 +49,7 @@
                         <td class="bg-white px-4 py-3 border border-gray-200">{{ $locataire->prenom }}</td>
                         <td class="bg-gray-50 px-4 py-3 border border-gray-200">{{ $locataire->email }}</td>
                         <td class="bg-white px-4 py-3 border border-gray-200">{{ $locataire->telephone }}</td>
+                        <td class="bg-white px-4 py-3 border border-gray-200">{{ $locataire->type_resident }}</td>
                         <td class="bg-gray-50 px-4 py-3 text-center border border-gray-200">{{ $locataire->numero_etage }}</td>
                         <td class="bg-white px-4 py-3 text-center border border-gray-200">{{ $locataire->numero_chambre }}</td>
                         

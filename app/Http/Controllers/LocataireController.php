@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Locataire;
+use Illuminate\Support\Facades\Hash;
+
+use App\Models\User;
+
 use Illuminate\Http\Request;
 // use Illuminate\Http\Controllers\Storage;
 use Illuminate\Support\Facades\Storage;
@@ -35,18 +39,48 @@ class LocataireController extends Controller
     public function store(Request $request)
 
     {
-        $data=$request->validate(
+        $validated=$request->validate(
             [
                 'nom'=>'required',
                 'prenom'=>'required',
-                'email'=>'required',
+                'email'=>'required|email',
+                'type_resident'=>'required',
                 'telephone'=>'required',
                 'numero_etage'=>'required',
                 'numero_chambre'=>'required',
-                'photo'=>'required',
-            ]
-            );
-        Locataire::create($data);
+                'photo'=>'nullable|image|mimes:jpeg,png,jpg|max:2048',
+                'password'=>'required|string|min:8|confirmed',      
+            ] );
+        //Traitement de la photo
+        if($request->hasFile('photo')){
+            $photoPath=$request->file('photo')->store('locataires','public');
+            $validated['photo']=$photoPath;
+        }else{
+            $validated['photo']=null;
+        }
+           
+        // Locataire::create($data);
+        $locataire = Locataire::create([
+        'nom' => $validated['nom'],
+        'prenom' => $validated['prenom'],
+        'telephone' => $validated['telephone'],
+        'email' => $validated['email'],
+        'type_resident' => $validated['type_resident'],
+        'numero_etage' => $validated['numero_etage'],
+        'numero_chambre' => $validated['numero_chambre'],
+        'photo' => $validated['photo'],
+        ]);
+         
+        User::create([
+        'nom' => $validated['nom'],
+        'prenom' => $validated['prenom'],
+        'telephone' => $validated['telephone'],
+        'email' => $validated['email'],
+        'password' => Hash::make($validated['password']),
+        'role' => 'locataire',
+    ]);
+
+
         return redirect()->route('locataires.create')->with("succes",'Locataire enrégistrer avec succès');
         //
     }
@@ -85,6 +119,7 @@ public function update(Request $request, Locataire $locataire)
         'prenom' => 'required|string|max:255',
         'email' => 'required|email|unique:locataires,email,'.$locataire->id,
         'telephone' => 'required|string|max:20',
+        'type_resident' => 'required',
         'numero_etage' => 'required|string|max:10',
         'numero_chambre' => 'required|string|max:10',
         'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
@@ -110,6 +145,11 @@ public function update(Request $request, Locataire $locataire)
     return redirect()->route('locataires.index')
         ->with('success', 'Locataire mis à jour avec succès');
 }
+
+    public function showPhoto(Locataire $locataire)
+        {
+            return view('locataires.photoresident', compact('locataire'));
+        }
     /**
      * Remove the specified resource from storage.
      */
@@ -119,4 +159,39 @@ public function update(Request $request, Locataire $locataire)
         return redirect()->route('locataires.index')->with('succes','Locataire supprimé avec succes');
         //
     }
+
+    public function dashboard()
+{
+    $user = auth()->user();
+
+    // visiteurs du locataire connecté
+    $visiteurs = \App\Models\Visiteur::where('locataire_id', $user->id)
+        ->when(request('search'), fn($q) =>
+            $q->where(function($query){
+                $query->where('nom', 'like', '%' . request('search') . '%')
+                      ->orWhere('prenom', 'like', '%' . request('search') . '%');
+            })
+        )
+        ->when(request('filtre'), function ($q) {
+            $filtre = request('filtre');
+            if ($filtre == 'jour') {
+                $q->whereDate('date', now());
+            } elseif ($filtre == 'semaine') {
+                $q->whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()]);
+            } elseif ($filtre == 'mois') {
+                $q->whereMonth('date', now()->month);
+            } elseif ($filtre == 'annee') {
+                $q->whereYear('date', now()->year);
+            }
+        })
+        ->latest()
+        ->paginate(10);
+
+    // notifications (si tu en as)
+    // $notifications = \App\Models\Notification::where('user_id', $user->id)->latest()->take(5)->get();
+
+    return view('locataires.dashboard', compact('visiteurs'));
+}
+
+
 }

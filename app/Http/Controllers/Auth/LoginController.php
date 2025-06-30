@@ -18,14 +18,35 @@ class LoginController extends Controller
         $credentials=$request-> validate([
             'email'=> 'required|email',
             'password'=> 'required',
+            'role' => 'required|in:admin,agent,locataire',
         ]);
-        if (Auth::attempt($credentials)){
-            return redirect()-> route('visiteurs.create');
-        }
-        return back()-> withErrors([
-            'email'=> 'Email ou mot de passe incorrect'
-        ]);
+        if (Auth::attempt([
+        'email' => $credentials['email'],
+        'password' => $credentials['password'],
+        'role' => $credentials['role'],
+    ])) {
+        $request->session()->regenerate();
 
+        // Redirection selon rôle
+        $role = Auth::user()->role;
+        if ($role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        } elseif ($role === 'agent') {
+            return redirect()->route('dashboard');
+        } else {
+            return redirect()->route('locataire.dashboard');
+        }
+    }
+
+    return back()->withErrors([
+        'email' => 'Les identifiants sont incorrects ou le rôle ne correspond pas.',
+    ]);
+        // if (Auth::attempt($credentials)){
+        //     return redirect()-> route('dashboard');
+        // }
+        // return back()-> withErrors([
+        //     'email'=> 'Email ou mot de passe incorrect'
+        
         
     }
 
@@ -34,6 +55,6 @@ class LoginController extends Controller
         auth()->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/');
+        return redirect('/login');
     }
 }

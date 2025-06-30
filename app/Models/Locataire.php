@@ -13,6 +13,7 @@ class Locataire extends Model
         'nom',
         'prenom',
         'email',
+        'type_resident',
         'telephone',  
         'numero_etage',
         'numero_chambre',

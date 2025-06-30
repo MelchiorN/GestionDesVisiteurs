@@ -18,9 +18,14 @@
         }
     </style>
 </head>
-<body class="bg-gray-50">
-    @yield('content')
-    
+<body 
+    class="min-h-screen bg-cover bg-center bg-no-repeat" 
+    style="background-image: linear-gradient(to right, #667eea, #764ba2), url('/images/fond-login.jpg');"
+>
+    <div class="bg-black/30 min-h-screen">
+        @yield('content')
+    </div>
+
     <!-- Scripts éventuels -->
     @stack('scripts')
 </body>

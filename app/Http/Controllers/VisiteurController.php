@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Hash;
+
 use App\Models\Visiteur;
 use App\Models\Locataire;
 use Illuminate\Http\Request;
@@ -14,7 +16,7 @@ class VisiteurController extends Controller
     public function index()
     {
         $visiteurs= Visiteur::with(['user','locataire'])->get();
-        return view('visiteurs.index',compact('visiteurs'));
+        return view('visiteurs.filtre',compact('visiteurs'));
 
         //
     }
@@ -35,9 +37,12 @@ class VisiteurController extends Controller
     public function store(Request $request)
     {
         $data=$request->validate([
-            'cni'=>'required',
+            'type_carte'=>'required',
+            'numero_carte'=>'required',
+            'photo_carte'=>'required',
             'nom'=>'required',
             'prenom'=>'required',
+            'photo_visiteur'=>'nullable|image',
             'date'=>'required',
             'heure_arrive'=>'required',
             'motif'=>'required',
@@ -45,6 +50,12 @@ class VisiteurController extends Controller
         ]);
         $data ['user_id']=auth()->id();
         $data['heure_arrive'] = now()->format('H:i');
+        if($request->hasFile('photo_visiteur')){
+            $photoPath=$request->file('photo_visiteur')->store('visiteurs','public');
+            $data['photo_visiteur']=$photoPath;
+        }else{
+            $data['photo_visiteur']=null;
+        }
         
         $visiteur=Visiteur::create($data);
         $locataire = \App\Models\Locataire::find($visiteur->locataire_id);
@@ -71,15 +82,56 @@ class VisiteurController extends Controller
         
         //
     }
+    
 
     /**
      * Update the specified resource in storage.
      */
-    public function update()
+    public function update(Request $request, Visiteur $visiteur)
     {
-        
-        
+        $request->validate([
+            'nom' => 'required|string',
+            'prenom' => 'required|string',
+            'type_carte' => 'required|string',
+            'numero_carte' => 'required|string',
+            'motif' => 'required|string',
+            'date' => 'required|date',
+            'heure_arrive' => 'required',
+            'photo_carte' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'photo_visiteur' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'locataire_id' => 'required|exists:locataires,id',
+        ]);
+
+        if ($request->hasFile('photo_carte')) {
+            $visiteur->photo_carte = $request->file('photo_carte')->store('cartes', 'public');
+        }
+
+        if ($request->hasFile('photo_visiteur')) {
+            $visiteur->photo_visiteur = $request->file('photo_visiteur')->store('visiteurs', 'public');
+        }
+
+        $visiteur->update([
+            'nom' => $request->nom,
+            'prenom' => $request->prenom,
+            'type_carte' => $request->type_carte,
+            'numero_carte' => $request->numero_carte,
+            'motif' => $request->motif,
+            'date' => $request->date,
+            'heure_arrive' => $request->heure_arrive,
+            'locataire_id' => $request->locataire_id,
+            'user_id' => auth()->id(),
+            'photo_carte' => $visiteur->photo_carte,
+            'photo_visiteur' => $visiteur->photo_visiteur,
+        ]);
+
+        return redirect()->route('visiteurs.filtre')->with('success', 'Visiteur mis à jour avec succès.');
     }
+
+    public function showPhoto(Visiteur $visiteur)
+    {
+        return view('visiteurs.photo', compact('visiteur'));
+    }
+
 
     /**
      * Remove the specified resource from storage.
@@ -135,5 +187,6 @@ class VisiteurController extends Controller
     $visiteur = Visiteur::findOrFail($notification->data['visiteur_id']);
 
 }
+    
 
 }
