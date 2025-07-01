@@ -193,5 +193,6 @@ public function update(Request $request, Locataire $locataire)
     return view('locataires.dashboard', compact('visiteurs'));
 }
 
+    
 
 }

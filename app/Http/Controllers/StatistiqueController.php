@@ -10,19 +10,25 @@ class StatistiqueController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
-    {
-        $date = $request->input('date', now()->toDateString());
-        $visiteurs = Visiteur::whereDate('created_at', $date)->get();
-        $total = $visiteurs->count();
-        $presents = $visiteurs->whereNull('heure_depart')->count();
-        $partis = Visiteur::where('motif', 'Parti')->count();
+   public function index(Request $request)
+{
+    
+    $visiteurs = Visiteur::latest()->get();
 
-        $bannis = Visiteur::where('motif', 'Banni')->count();
+    $total = $visiteurs->count();
+    $presents = $visiteurs->whereNull('heure_depart')->count();
+    $partis = $visiteurs->where('heure_depart')->count();
+    $bannis = $visiteurs->where('statut', 'Banni')->count();
 
-    return view('statistique.index', compact('date', 'total', 'presents', 'partis', 'bannis'));
-        //
-    }
+    return view('statistique.index', [
+        'visiteurs' => $visiteurs,
+        'total' => $total,
+        'presents' => $presents,
+        'partis' => $partis,
+        'bannis' => $bannis,
+    ]);
+}
+
 
     /**
      * Show the form for creating a new resource.

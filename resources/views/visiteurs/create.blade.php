@@ -117,7 +117,7 @@
             <button type="submit"
                     class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 shadow-lg transition duration-200">
                 <img src="https://cdn-icons-png.flaticon.com/512/992/992651.png" alt="Enregistrer" class="w-5 h-5 inline mr-2 -mt-1">
-                Enregistrer le visiteur
+                 <i class="fa fa-floppy-o" aria-hidden="true"></i> Enregistrer le visiteur
             </button>
         </div>
     </form>

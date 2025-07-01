@@ -29,7 +29,7 @@ class NotificationController extends Controller
     // Récupérer le visiteur via le tableau $data
     $visiteur = Visiteur::findOrFail($data['visiteur_id']);
 
-    DB::transaction(function () use ($request, $notification, $visiteur, &$data) {
+    DB::transaction(function () use ($request, $notification, $visiteur, $data) {
         // Marquer la notification comme lue
         $notification->read_at = now();
         $notification->save();
@@ -44,7 +44,7 @@ class NotificationController extends Controller
 
         // Mettre à jour le statut du visiteur selon l'action
         if ($request->action === 'accept') {
-            $visiteur->statut = 'En attente';
+            $visiteur->statut = 'Présent';
         } elseif ($request->action === 'refuse') {
             $visiteur->statut = 'Parti';
             $visiteur->heure_depart=now()->format('H:i');

@@ -9,11 +9,13 @@
     @if($locataire->photo)
         <img src="{{ asset('storage/' . $locataire->photo) }}"
              alt="Photo du resident"
-             class="max-w-2xl w-full rounded-lg shadow-lg border border-gray-300">
+             class="max-w-2xl w-[50%] rounded-lg shadow-lg border border-gray-300">
     @else
         <p class="text-gray-500">Aucune photo disponible.</p>
     @endif
 
-    <a href="{{ route('locataires.index') }}" class="mt-6 text-indigo-600 hover:underline">← Retour à la liste</a>
+    <a href="{{ route('locataires.index') }}" class="mt-6 text-indigo-600 hover:underline">
+         <i class="fa fa-arrow-left" aria-hidden="true"></i> <span>Retour à la liste</span>
+    </a>
 </div>
 @endsection

@@ -13,12 +13,29 @@ class VisiteurController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
+    {
+        $query = Visiteur::with(['locataire', 'user'])->orderBy('date', 'desc')->orderBy('heure_arrive', 'desc');
+        // Filtre par statut
+        if ($request->has('statut')) {
+            if ($request->statut === 'present') {
+                $query->whereNull('heure_depart');
+            } elseif ($request->statut === 'parti') {
+                $query->whereNotNull('heure_depart');
+            }
+        }
+        $visiteurs = $query->paginate(10);
+        return view('visiteurs.index', [
+            'visiteurs' => $visiteurs,
+            'statutSelectionne' => $request->statut ?? 'tous'
+        ]);
+        $visiteur = Visiteur::findOrFail($notification->data['visiteur_id']);
+
+    }
+    public function dashboard()
     {
         $visiteurs= Visiteur::with(['user','locataire'])->get();
-        return view('visiteurs.filtre',compact('visiteurs'));
-
-        //
+        return view('visiteurs.filtre',compact('visiteurs')); 
     }
 
     /**
@@ -139,7 +156,7 @@ class VisiteurController extends Controller
     public function destroy(Visiteur $visiteur )
     {
         $visiteur->delete();
-        return redirect()->route('visiteurs.filtre')->with('succes','visiteur supprimé avec succès');
+        return redirect()->route('visiteurs.index')->with('succes','visiteur supprimé avec succès');
         //
     }
 
@@ -147,13 +164,9 @@ class VisiteurController extends Controller
     public function presents()
     {
        $visiteurs = Visiteur::with(['locataire', 'user'])->whereNull('heure_depart')->latest()->get();
-       return view('visiteurs.presents', compact('visiteurs'));
-        
-         
-        
-                    
-        
+       return view('visiteurs.presents', compact('visiteurs'));    
     }
+
     public function enregisterDepart(Visiteur $visiteur)
     {
         $visiteur->update([
@@ -162,31 +175,7 @@ class VisiteurController extends Controller
         return redirect()->route('visiteurs.presents')->with('succes','Heure de départ enrégitrée');
 
     }
-    public function filtreVisiteurs(Request $request)
-{
-    $query = Visiteur::with(['locataire', 'user'])
-                ->orderBy('date', 'desc')
-                ->orderBy('heure_arrive', 'desc');
-
-    // Filtre par statut
-    if ($request->has('statut')) {
-        if ($request->statut === 'present') {
-            $query->whereNull('heure_depart');
-        } elseif ($request->statut === 'parti') {
-            $query->whereNotNull('heure_depart');
-        }
-    }
-
-    $visiteurs = $query->paginate(10);
-
-    return view('visiteurs.filtre', [
-        'visiteurs' => $visiteurs,
-        'statutSelectionne' => $request->statut ?? 'tous'
-    ]);
-
-    $visiteur = Visiteur::findOrFail($notification->data['visiteur_id']);
-
-}
+    
     
 
 }

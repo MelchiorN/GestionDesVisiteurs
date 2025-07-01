@@ -8,12 +8,17 @@
 
     <!-- Barre de recherche -->
     <div class="bg-indigo-50 p-6 rounded-lg shadow mb-6">
-        <form method="GET" action="{{ route('visiteurs.filtre') }}" class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
-            <div class="flex-1">
-                <label for="search" class="block text-sm font-medium text-gray-700">Rechercher un visiteur :</label>
-                <input type="text" name="search" id="search" value="{{ request('search') }}" placeholder="Nom ou prénom du visiteur"
-                    class="mt-1 block w-full pl-3 pr-12 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-            </div>
+        <form method="GET" action="{{ route('visiteurs.index') }}" class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+            <!-- Sélecteur de statut -->
+        <div>
+            <label for="statut" class="block text-sm font-medium text-gray-700">Filtrer par statut :</label>
+            <select name="statut" id="statut" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <option value="">Tous les visiteurs</option>
+                <option value="present">Présents</option>
+                <option value="vanni">Bannis</option>
+                <option value="parti">Partis</option>
+            </select>
+        </div>
             <button type="submit" class="mt-6 md:mt-0 bg-indigo-600 text-white px-5 py-2 rounded hover:bg-indigo-700 transition shadow">
                 Rechercher
             </button>
@@ -53,18 +58,20 @@
                         </td>
 
                         <!-- Infos -->
-                        <td class="px-4 py-3 border">{{ $visiteur->nom }} {{ $visiteur->prenom }}</td>
+                        <td class="px-4 py-3 border"> {{ $visiteur->nom }} {{ $visiteur->prenom }}</td>
                         <td class="px-4 py-3 border">{{ $visiteur->locataire->nom }} {{ $visiteur->locataire->prenom }}</td>
                         <td class="px-4 py-3 border">{{ $visiteur->date }}</td>
                         <td class="px-4 py-3 border">{{ $visiteur->motif }}</td>
                         <td class="px-4 py-3 border">{{ $visiteur->heure_arrive }}</td>
                         <td class="px-4 py-3 border ">{{ $visiteur->heure_depart ?? '-' }}</td>
-                        <td class="px-4 py-3 border"><span class="bg-gray-100 text-red-900">{{$visiteur->statut}}</span></td>
+                        <td class="px-4 py-3 border"><span class="bg-gray-100 text-red-900"> {{$visiteur->heure_depart ? $visiteur->statut : 'Présent'}}</span></td>
                                         <!-- Actions -->
+
+
                         <td class="px-4 py-3 border space-y-1">
                             <a href="{{ route('visiteurs.edit', $visiteur->id) }}"
                                class="inline-block bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 transition text-xs">
-                                ✏️ Modifier
+                                <i class="fa fa-pencil" aria-hidden="true"></i> Modifier
                             </a>
 
                             <form action="{{ route('visiteurs.destroy', $visiteur->id) }}" method="POST"
@@ -73,7 +80,7 @@
                                 @method('DELETE')
                                 <button type="submit"
                                         class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition text-xs">
-                                    🗑 Supprimer
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>Supprimer
                                 </button>
                             </form>
                         </td>

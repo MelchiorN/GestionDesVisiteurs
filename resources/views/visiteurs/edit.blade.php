@@ -84,7 +84,7 @@
 
         <div class="md:col-span-2 text-right">
             <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded hover:bg-indigo-700">
-                Mettre à jour
+                <i class="fa fa-pencil" aria-hidden="true"></i> Mettre à jour
             </button>
         </div>
     </form>

@@ -14,6 +14,8 @@
         <p class="text-gray-500">Aucune photo disponible.</p>
     @endif
 
-    <a href="{{ route('visiteurs.filtre') }}" class="mt-6 text-indigo-600 hover:underline">← Retour à la liste</a>
+    <a href="{{ route('visiteurs.index') }}" class="mt-6 text-indigo-600 hover:underline"> 
+        <i class="fa fa-arrow-left" aria-hidden="true"></i> <span>Retour à la liste</span>
+    </a>
 </div>
 @endsection

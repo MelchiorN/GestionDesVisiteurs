@@ -18,9 +18,9 @@
                 <div class="flex justify-between items-start">
                     <div>
                         <h3 class="font-semibold text-lg">
-                            Nouveau visiteur : {{ $data['nom'] ?? 'Nom inconnu' }} {{ $data['prenom'] ?? '' }}
+                            Nouveau visiteur : {{ $data['nom'] }} {{ $data['prenom']}}
                         </h3>
-                        <p class="text-gray-600">Motif : {{ $data['motif'] ?? '-' }}</p>
+                        <p class="text-gray-600">Motif : {{ $data['motif'] }}</p>
                         <p class="text-sm text-gray-500">
                             Arrivé le {{ \Carbon\Carbon::parse($notification->created_at)->format('d/m/Y à H:i') }}
                         </p>
@@ -37,7 +37,7 @@
 
                         <div>
                             <label for="message-{{ $notification->id }}" class="block text-sm font-medium text-gray-700">
-                                Message (optionnel)
+                                Message 
                             </label>
                             <textarea id="message-{{ $notification->id }}" name="message" rows="2"
                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"></textarea>
@@ -62,7 +62,7 @@
             </div>
         @empty
             <div class="text-center py-8 text-gray-500">
-                Aucune notification pour ce locataire.
+                Aucune notification pour ce résident.
             </div>
         @endforelse
     </div>

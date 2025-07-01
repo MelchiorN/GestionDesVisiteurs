@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Ajouter un locataire')
+@section('title', 'Ajouter un résident')
 
 @section('content')
 <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-10 mt-10 relative">
@@ -8,8 +8,8 @@
     <!-- Titre centré -->
     <div class="text-center mb-10">
         <img src="https://cdn-icons-png.flaticon.com/512/987/987642.png" alt="Icon" class="w-14 h-14 mx-auto mb-2">
-        <h1 class="text-3xl font-bold text-indigo-700">Ajouter un locataire</h1>
-        <p class="text-sm text-gray-500">Formulaire d'enregistrement d'un nouveau locataire</p>
+        <h1 class="text-3xl font-bold text-indigo-700">Ajouter un résident</h1>
+        <p class="text-sm text-gray-500">Formulaire d'enregistrement d'un nouveau résident</p>
     </div>
 
     <!-- Message d'erreurs -->
@@ -143,7 +143,7 @@
 
         <!-- Champ Photo -->
         <div class="md:col-span-2">
-            <label for="photo" class="block text-sm font-semibold text-gray-700 mb-1">Photo du locataire</label>
+            <label for="photo" class="block text-sm font-semibold text-gray-700 mb-1">Photo du résident</label>
             <div class="relative">
                 <input type="file" name="photo" id="photo" accept="image/*"
                     class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-indigo-500 focus:outline-none file:bg-indigo-100 file:border-none file:rounded file:px-3 file:py-1">
@@ -159,7 +159,7 @@
             <button type="submit"
                     class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 shadow-lg transition duration-200">
                 <img src="https://cdn-icons-png.flaticon.com/512/992/992651.png" alt="Enregistrer" class="w-5 h-5 inline mr-2 -mt-1">
-                Enregistrer le locataire
+                Enregistrer le résident
             </button>
         </div>
     </form>

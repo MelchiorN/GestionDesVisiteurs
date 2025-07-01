@@ -24,23 +24,24 @@ class LoginController extends Controller
         'email' => $credentials['email'],
         'password' => $credentials['password'],
         'role' => $credentials['role'],
-    ])) {
-        $request->session()->regenerate();
+        ]))
+        {
+            $request->session()->regenerate();
 
-        // Redirection selon rôle
-        $role = Auth::user()->role;
-        if ($role === 'admin') {
-            return redirect()->route('admin.dashboard');
-        } elseif ($role === 'agent') {
-            return redirect()->route('dashboard');
-        } else {
-            return redirect()->route('locataire.dashboard');
+            // Redirection selon rôle
+            $role = Auth::user()->role;
+            if ($role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            } elseif ($role === 'agent') {
+                return redirect()->route('dashboard');
+            } else {
+                return redirect()->route('locataire.dashboard');
+            }
         }
-    }
 
-    return back()->withErrors([
-        'email' => 'Les identifiants sont incorrects ou le rôle ne correspond pas.',
-    ]);
+        return back()->withErrors(['email' => 'Les identifiants sont incorrects ou le rôle ne correspond pas.' ]);
+       
+        
         // if (Auth::attempt($credentials)){
         //     return redirect()-> route('dashboard');
         // }
