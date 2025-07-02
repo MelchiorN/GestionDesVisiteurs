@@ -23,5 +23,6 @@ class Locataire extends Model
     {
         return $this->hasMany(Visiteur::class);
     }
+    
    
 }

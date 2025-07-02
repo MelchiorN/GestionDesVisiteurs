@@ -15,9 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('nom');
             $table->string('prenom');
+            $table->string('email');
+            $table->string('type_resident');
             $table->string('telephone');
             $table->string('numero_etage');
             $table->string('numero_chambre');
+            $table->string('photo')->nullable();
             $table->timestamps();
         });
     }

@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Locataire;
+use App\Models\Visiteur;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\User;
 
 use Illuminate\Http\Request;
 // use Illuminate\Http\Controllers\Storage;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Notification as NotificationModel;
+use Illuminate\Support\Facades\DB;
 
 class LocataireController extends Controller
 {
@@ -192,6 +196,75 @@ public function update(Request $request, Locataire $locataire)
 
     return view('locataires.dashboard', compact('visiteurs'));
 }
+
+    public function infoProfil(){
+        $user = Auth::user();
+
+    // Récupérer le locataire lié à l'utilisateur connecté via l'email (si pas de user_id)
+    $locataire = Locataire::where('email', $user->email)->first();
+
+    if (!$locataire) {
+        // Par exemple, rediriger ou afficher message si aucun locataire trouvé
+        return redirect()->route('home')->withErrors('Locataire non trouvé.');
+    }
+
+    return view('locataires.profil', compact('user', 'locataire'));
+    }
+    public function infoVisite(){
+        $user= Auth::user();
+        $locataire=Locataire::where('email',$user->email)->first();
+        $visiteur=$locataire->visiteurs()->get();
+        return view('locataires.visite',compact('locataire','visiteur'));
+    }
+    public function infoNotif(){
+        $user=Auth::user();
+        $locataire=Locataire::where('email',$user->email)->first();
+        $visiteur=$locataire->visiteurs()->get();
+        $notifications = $locataire->unreadNotifications()->latest()->paginate(10);
+        return view('locataires.notif',compact('locataire','visiteur','notifications','user'));
+    }
+    public function reponse(Request $request, $notificationId,){
+        $user=Auth::user();
+        $locataire=Locataire::where('email',$user->email)->first();
+        $notification = NotificationModel::findOrFail($notificationId);
+
+    // Convertir en tableau pour manipuler plus facilement
+    $data = is_array($notification->data) ? $notification->data : json_decode($notification->data, true);
+
+    // Récupérer le visiteur via le tableau $data
+    $visiteur = Visiteur::findOrFail($data['visiteur_id']);
+
+    DB::transaction(function () use ($request, $notification, $visiteur, $data) {
+        // Marquer la notification comme lue
+        $notification->read_at = now();
+        $notification->save();
+
+        // Mettre à jour les données
+        $data['action'] = $request->action;
+        $data['message'] = $request->message;
+        $data['processed_at'] = now()->toDateTimeString();
+
+        $notification->data = $data;
+        $notification->save();
+
+        // Mettre à jour le statut du visiteur selon l'action
+        if ($request->action === 'accept') {
+            $visiteur->statut = 'Présent';
+        } elseif ($request->action === 'refuse') {
+            $visiteur->statut = 'Parti';
+            $visiteur->heure_depart=now()->format('H:i');
+        } else {
+            $visiteur->statut = 'Banni';
+            $visiteur->heure_depart=now()->format('H:i');
+        }
+        $visiteur->save();
+    });
+
+    return redirect()->back()->with('success', 'Action enregistrée avec succès');
+
+    }
+
+    
 
     
 

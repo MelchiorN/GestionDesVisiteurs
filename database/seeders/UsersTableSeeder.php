@@ -23,14 +23,7 @@ class UsersTableSeeder extends Seeder
             'password' => Hash::make('agent123'),
             'role' => 'agent',
         ],
-        [
-            'nom' => 'Rene',
-            'prenom' => 'Jacques',
-            'telephone' => '33453764',
-            'email' => 'jacquesrene2@gmail.com',
-            'password' => Hash::make('agent2123'),
-            // pas de role défini ici
-        ],
+
         [
             'nom' => 'Lorentz',
             'prenom' => 'Hubert',
@@ -39,14 +32,7 @@ class UsersTableSeeder extends Seeder
             'password' => Hash::make('agent1243'),
             'role' => 'admin',
         ],
-        [
-            'nom' => 'Yve',
-            'prenom' => 'Yves',
-            'telephone' => '24563474',
-            'email' => 'yyves23t@gmail.com',
-            'password' => Hash::make('agent1234'),
-            // pas de role défini ici
-        ],
+       
     ];
 
     foreach ($agents as $agent) {
