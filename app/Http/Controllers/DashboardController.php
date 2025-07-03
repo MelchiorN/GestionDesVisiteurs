@@ -10,6 +10,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $visiteurs =Visiteur::latest()->get();
+        $presents=$visiteurs->whereNull('heure_depart')->count();
         // Statistiques de base
         $stats = [
             'today' => Visiteur::whereDate('created_at', today())->count(),
@@ -37,7 +39,7 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        return view('dashboard', compact('stats', 'weeklyData', 'purposeData', 'recentVisitors'));
+        return view('dashboard', compact('stats', 'weeklyData', 'purposeData', 'recentVisitors','presents'));
     }
 
     private function getWeeklyData()

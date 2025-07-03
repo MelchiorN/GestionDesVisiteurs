@@ -25,10 +25,10 @@ class UsersTableSeeder extends Seeder
         ],
 
         [
-            'nom' => 'Lorentz',
+            'nom' => 'Admin',
             'prenom' => 'Hubert',
-            'telephone' => '345347',
-            'email' => 'lrtzhub23@gmail.com',
+            'telephone' => '90546756',
+            'email' => 'admin@gmail.com',
             'password' => Hash::make('agent1243'),
             'role' => 'admin',
         ],

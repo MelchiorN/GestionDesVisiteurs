@@ -29,7 +29,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
  
 //Route Agent
 Route::middleware(['auth', 'role:agent'])->group(function () {
-     Route::get('/dashboard', function() { return view('dashboard.dashboard'); })->name('dashboard');     
+     Route::get('/agent/dashboard', function() { return view('dashboard.dashboard'); })->name('agent.dashboard');     
    
 
      // Gestion des visiteurs
@@ -67,7 +67,6 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/{id}/action', [NotificationController::class, 'action'])->name('notifications.action');
     Route::get('/locataires/{locataire}/notifications', [NotificationController::class, 'index'])->name('locataires.notifications');       
-    Route::post('/notifications/{notification}/action', [NotificationController::class, 'action'])->name('notifications.action');
     Route::get('/statistiques', [App\Http\Controllers\StatistiqueController::class, 'index'])->name('statistiques.index');
 
 });
@@ -87,9 +86,12 @@ Route::middleware(['auth', 'role:locataire'])->group(function () {
 });
 
 // Route gestion superadmin
-// Route::middleware(['auth','role: admin'])->group(function(){
-//     Route::get('/admin/dashboard',[AdminController::class, 'accueil'])->name('accueil');   
-// });
+Route::middleware(['auth', 'role:admin'])->group(function(){
+    Route::get('/admin/dash',[AdminController::class, 'accueil'])->name('admin.accueil');   
+    Route::get('/admin/parametre',[AdminController::class,'afficheParametre'])->name('admin.parametre');
+     // la mise à jour des paramètres de l'immeuble
+    Route::put('/admin/parametre', [AdminController::class, 'updateParametre'])->name('admin.parametre.update');
+});
 
 
     

@@ -9,7 +9,12 @@ class AdminController extends Controller
     public function accueil(){
         return view('admin.acceuil');
     }
-    
+    public function afficheParametre(){
+        return view('admin.reglage');
+    }
+     public function updateParametre(){
+
+     }
     
     /**
      * Display a listing of the resource.

@@ -8,6 +8,56 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    @push('styles')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+@endpush
+@push('scripts')
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Crée une carte centrée par défaut
+            var map = L.map('map').setView([6.1319, 1.2228], 13); // Exemple : Lomé
+
+            // Ajouter la couche de tuiles OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            var marker;
+
+            // Fonction pour mettre à jour les champs lat/lng et le marqueur
+            function updateMarker(lat, lng) {
+                document.getElementById('latitude').value = lat;
+                document.getElementById('longitude').value = lng;
+
+                if (marker) {
+                    map.removeLayer(marker);
+                }
+                marker = L.marker([lat, lng]).addTo(map);
+                map.setView([lat, lng], 15);
+            }
+
+            // Lorsque l'utilisateur clique sur la carte
+            map.on('click', function(e) {
+                updateMarker(e.latlng.lat, e.latlng.lng);
+            });
+
+            // Option : géolocalisation automatique via navigateur
+            document.getElementById('locateOnMap').addEventListener('click', function() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        updateMarker(position.coords.latitude, position.coords.longitude);
+                    }, function(error) {
+                        alert("Erreur : " + error.message);
+                    });
+                } else {
+                    alert("Votre navigateur ne supporte pas la géolocalisation.");
+                }
+            });
+        });
+    </script>
+@endpush
+
 </head>
 <body class="bg-gray-100 font-sans leading-normal tracking-normal">
 
@@ -19,8 +69,8 @@
             <nav class="flex-grow p-4">
                 <ul class="space-y-2">
                     <li>
-                        <a href="{{ route('accueil') }}" class="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200
-                            @if(request()->routeIs('accueil')) active bg-gray-100 text-yellow-700 @endif">
+                        <a href="{{ route('admin.accueil') }}" class="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200
+                            @if(request()->routeIs('admin.accueil')) active bg-gray-100 text-yellow-700 @endif">
                             <i class="fas fa-tachometer-alt mr-3"></i> Tableau de bord
                         </a>
                     </li>
@@ -49,8 +99,8 @@
                         </a>
                     </li>
                     <li>
-                        <a href="" class="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200
-                            @if (request()->routeIs('')) active bg-gray-100 text-yellow-800 @endif">
+                        <a href="{{route('admin.parametre')}}" class="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200
+                            @if (request()->routeIs('admin.parametre')) active bg-gray-100 text-yellow-800 @endif">
                             <i class="fas fa-cogs mr-3"></i> Paramètres
                         </a>
                     </li>

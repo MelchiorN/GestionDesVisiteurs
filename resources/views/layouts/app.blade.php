@@ -49,7 +49,7 @@
             <ul class="space-y-2">
                 <!-- Accueil -->
                 <li>
-                    <a href="{{ route('dashboard') }}" class="nav-item flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors @if(request()->routeIs('dashboard')) active @endif">
+                    <a href="{{ route('agent.dashboard') }}" class="nav-item flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors @if(request()->routeIs('dashboard')) active @endif">
                         <i class="fas fa-home mr-3"></i><span>Accueil</span>                       
                     </a>
                 </li>

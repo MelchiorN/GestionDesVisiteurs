@@ -18,12 +18,12 @@ class LoginController extends Controller
         $credentials=$request-> validate([
             'email'=> 'required|email',
             'password'=> 'required',
-            'role' => 'required|in:admin,agent,locataire',
+            
         ]);
         if (Auth::attempt([
         'email' => $credentials['email'],
         'password' => $credentials['password'],
-        'role' => $credentials['role'],
+        
         ]))
         {
             $request->session()->regenerate();
@@ -31,9 +31,9 @@ class LoginController extends Controller
             // Redirection selon rôle
             $role = Auth::user()->role;
             if ($role === 'admin') {
-                return redirect()->route('accueil');
+                return redirect()->route('admin.accueil');
             } elseif ($role === 'agent') {
-                return redirect()->route('dashboard');
+                return redirect()->route('agent.dashboard');
             } else {
                 return redirect()->route('locataire.dashboard');
             }

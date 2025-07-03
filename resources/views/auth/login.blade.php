@@ -32,16 +32,7 @@
                         class="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         placeholder="Mot de passe">
                 </div>
-                <div>
-                    <label for="role" class="block text-sm font-medium text-gray-900">Type de connexion</label>
-                    <select id="role" name="role" required
-                        class="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <option value="" disabled selected>Choisir un type</option>
-                        <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                        <option value="agent" {{ old('role') == 'agent' ? 'selected' : '' }}>Agent</option>
-                        <option value="locataire" {{ old('role') == 'locataire' ? 'selected' : '' }}>Locataire</option>
-                    </select>
-                </div>
+                
             </div>
             <div>
                 <button type="submit"

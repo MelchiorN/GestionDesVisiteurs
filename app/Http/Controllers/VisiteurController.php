@@ -75,7 +75,7 @@ class VisiteurController extends Controller
         }
         
         $visiteur=Visiteur::create($data);
-        $locataire = \App\Models\Locataire::find($visiteur->locataire_id);
+        $locataire = Locataire::find($visiteur->locataire_id);
         $locataire->notify(new NouveauVisiteurNotification($visiteur));
         return redirect()->route('visiteurs.create')->with('success','Visiteur enrégistré avec succès');
          

@@ -46,7 +46,9 @@
             </a>
 
             <a href="{{route('notif.perso')}}" class="nav-item block px-4 py-3 rounded-lg text-center text-white hover:bg-purple-300 transition @if(request()->routeIs('notif.perso')) active bg-yellow-100 text-yellow-800 @endif">
-                <i class="fa-solid fa-bell"></i> <span>Notifications</span>
+                <i class="fa-solid fa-bell"></i> 
+                
+                <span>Notifications</span>
             </a>
 
             <a href="" class="nav-item block px-4 py-3 rounded-lg text-center text-white hover:bg-purple-300 transition @if(request()->routeIs('resident.messages')) active bg-yellow-100 text-yellow-800 @endif">

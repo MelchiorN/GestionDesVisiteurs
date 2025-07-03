@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class NotificationController extends Controller
 {
-    public function index(Locataire $locataire,)
+    public function index(Locataire $locataire)
     {
         $notifications = $locataire->unreadNotifications()->latest()->paginate(10);
      
