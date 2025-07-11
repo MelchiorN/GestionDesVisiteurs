@@ -6,7 +6,6 @@ use App\Models\Locataire;
 use App\Models\Visiteur;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-
 use App\Models\User;
 
 use Illuminate\Http\Request;
@@ -263,6 +262,63 @@ public function update(Request $request, Locataire $locataire)
     return redirect()->back()->with('success', 'Action enregistrée avec succès');
 
     }
+    public function editer(Locataire $locataire)
+    {
+        $user=Auth::user();
+        $locataire=Locataire::where('email',$user-> email)-> first();
+      
+        return view('locataires.modif', ['locataire' => $locataire]);
+        //
+        // return view('locataires.edit');
+    }
+    public function miseAjour(Request $request){
+        $user=Auth::user();
+        $locataire=Locataire::where('email',$user->email)->first();
+         $validated = $request->validate([
+        'nom' => 'required|string|max:255',
+        'prenom' => 'required|string|max:255',
+        'email' => 'required|email|unique:locataires,email,'.$locataire->id,
+        'telephone' => 'required|string|max:20',
+        'type_resident' => 'required',
+        'numero_etage' => 'required|string|max:10',
+        'numero_chambre' => 'required|string|max:10',
+        'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+    ]);
+
+    // Gestion de la photo
+    if ($request->hasFile('photo')) {
+        // Supprimer l'ancienne photo si elle existe
+        if ($locataire->photo && Storage::exists('public/'.$locataire->photo)) {
+            Storage::delete('public/'.$locataire->photo);
+        }
+        
+        // Enregistrer la nouvelle photo
+        $path = $request->file('photo')->store('locataires', 'public');
+        $validated['photo'] = $path;
+    } else {
+        // Conserver l'ancienne photo si aucune nouvelle n'est uploadée
+        $validated['photo'] = $locataire->photo;
+    }
+    dd($validated);
+
+    $locataire->update($validated);
+    
+    // //Mise a jour du user
+    // $user->update([
+    //     'nom' => $validated['nom'],
+    //     'prenom' => $validated['prenom'],
+    //     'email' => $validated['email'],
+    //     'telephone' => $validated['telephone'],
+    // ]);
+
+    return redirect()->route('profil')
+        ->with('success', 'Profilmis à jour avec succès');;
+        
+    }
+
+
+
+
 
     
 

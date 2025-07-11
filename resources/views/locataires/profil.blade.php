@@ -57,7 +57,7 @@
 
                 <!-- Modifier son profil -->
                 <div class="mt-8 text-center md:text-left">
-                    <a href="" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">   
+                    <a href="{{route('modif.resident',['locataire' => $locataire->id])}}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">   
                         <i class="fas fa-edit mr-2"></i> <span>Modifier mon profil</span> 
                     </a>
                 </div>

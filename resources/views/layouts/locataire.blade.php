@@ -45,8 +45,21 @@
                 <i class="fas fa-calendar-check mr-2"></i><span>Mes visites</span>
             </a>
 
-            <a href="{{route('notif.perso')}}" class="nav-item block px-4 py-3 rounded-lg text-center text-white hover:bg-purple-300 transition @if(request()->routeIs('notif.perso')) active bg-yellow-100 text-yellow-800 @endif">
+            <a href="{{route('notif.perso')}}" class="nav-item block px-4 py-3 rounded-lg text-center text-white hover:bg-purple-300 transition @if(request()->routeIs('notif.perso')) active bg-yellow-100 text-yellow-800 @endif relative">
+                @php
+                $user=Auth::user();
+                $locataire=App\Models\Locataire::where('email',$user->email)->first();
+                $unreadCount=$locataire->unreadNotifications->count();
+
+
+                @endphp
+
                 <i class="fa-solid fa-bell"></i> 
+                @if($unreadCount > 0)
+                    <span class="absolute top-1 right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
+                        {{ $unreadCount }}
+                    </span>
+                @endif
                 
                 <span>Notifications</span>
             </a>
@@ -73,8 +86,25 @@
 
     <!-- Contenu principal -->
     <div class="flex-1 flex flex-col min-h-screen">
-        <div class="flex-grow px-6 py-8">
-            @yield('content')
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <header class="bg-gray-200 shadow-md p-4 flex justify-between items-center">
+                <div class="text-xl font-semibold text-gray-800">
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-gray-600">{{Auth::user()-> nom}} {{ Auth::user()->prenom  }}</span>
+                    <a href="{{route('profil')}}" class="text-indigo-600 hover:text-indigo-800">
+                       
+                    <img class="object-cover rounded-full w-10 h-10  shadow-md"
+                         src="{{ asset('storage/' . $locataire->photo) }}"
+                         alt="Photo de {{ $locataire->nom }}">
+        
+                    </a>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+                @yield('content')
+            </main>
         </div>
 
         <footer class="bg-white text-center text-gray-500 text-sm border-t py-4">

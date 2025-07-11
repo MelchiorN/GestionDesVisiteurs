@@ -61,6 +61,7 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
     // Affiche informations d'un resident 
     Route::get('/locataires/{locataire}',[LocataireController::class,'show'])->name('locataires.show');
     
+    
 
 
     
@@ -82,6 +83,9 @@ Route::middleware(['auth', 'role:locataire'])->group(function () {
     Route::get('/notification',[LocataireController::class,'infoNotif'])->name('notif.perso');
     //Confirmation de la notifiacation
     Route::post('/confirm/{notificationId}',[LocataireController::class,'reponse'])->name('notif.reponse');
+    //Modif un resident
+    Route::get('/profil/modifier',[LocataireController::class,'editer' ])->name('modif.resident');
+    Route::put('/profil/modifier', [LocataireController::class, 'miseAjour'])->name('resident.update');
 
 });
 
@@ -91,6 +95,22 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
     Route::get('/admin/parametre',[AdminController::class,'afficheParametre'])->name('admin.parametre');
      // la mise à jour des paramètres de l'immeuble
     Route::put('/admin/parametre', [AdminController::class, 'updateParametre'])->name('admin.parametre.update');
+    //Gestion Visiteurs
+    Route::get('/admin/visiteurs',[AdminController::class,'index'])->name('admin.visiteurs');
+    // Formulaire locataire
+    Route::get('/admin/resident/form',[AdminController::class,'create'])->name('admin.create.resident');
+    //Creer des locataires
+    Route::post('/admin/store',[AdminController::class,'store'])->name('admin.store.resident');
+
+    //Gestion Locataires
+    Route::get('/admin/resident',[AdminController::class,'infoResident'])->name('admin.resident');
+    //Statistique
+    Route::get('/admin/stats',[AdminController::class,'stat'])->name('admin.statistique');
+    //Créer un agent 
+    Route::get('/admin/create',[AdminController::class,'formAgent'])->name('admin.form.agent');
+    Route::post('/admin/create',[AdminController::class,'storeAgent'])->name('admin.store.agent');
+    //Afficher tous les agents
+    Route::get('/admin/liste/agent',[AdminController::class,'indexAgent'])->name('admin.liste.agent');
 });
 
 

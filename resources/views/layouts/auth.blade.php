@@ -15,7 +15,7 @@
 </head>
 <body 
     class="min-h-screen bg-cover bg-center bg-no-repeat" 
-    style="background: linear-gradient(to right, #667eea, #764ba2);"
+    style=""
 >
     <div class="bg-black/30 min-h-screen">
         @yield('content')

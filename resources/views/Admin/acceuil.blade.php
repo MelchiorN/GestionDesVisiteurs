@@ -24,8 +24,36 @@
 
         <div class="bg-white rounded-xl shadow-lg p-6 flex items-center justify-between transition-transform duration-200 hover:scale-105">
             <div>
-                <h3 class="text-gray-500 text-sm font-medium">Locataires Actifs</h3>
-                <p class="text-3xl font-bold text-gray-900 mt-1"></p>
+                <h3 class="text-gray-500 text-sm font-medium">Resident Total </h3>
+                @php 
+                use App\Models\Locataire;
+                $nbreResidents=Locataire::count();
+                @endphp
+                <p class="text-3xl font-bold  text-center text-gray-900 mt-1">{{$nbreResidents}}</p>
+            </div>
+            <div class="p-3 rounded-full bg-green-100 text-green-600">
+                <i class="fas fa-home text-2xl"></i>
+            </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-lg p-6 flex items-center justify-between transition-transform duration-200 hover:scale-105">
+            <div>
+                <h3 class="text-gray-500 text-sm font-medium">Locataires </h3>
+                @php 
+                $nbreLocataire=Locataire::where('type_resident','locataire')->count();
+                @endphp
+                <p class="text-3xl font-bold  text-center text-gray-900 mt-1">{{$nbreLocataire}}</p>
+            </div>
+            <div class="p-3 rounded-full bg-green-100 text-green-600">
+                <i class="fas fa-home text-2xl"></i>
+            </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-lg p-6 flex items-center justify-between transition-transform duration-200 hover:scale-105">
+            <div>
+                <h3 class="text-gray-500 text-sm font-medium">Proprietaires </h3>
+                @php 
+                $nbreProprietaire=Locataire::where('type_resident','proprietaire')->count();
+                @endphp
+                <p class="text-3xl font-bold  text-center text-gray-900 mt-1">{{$nbreProprietaire}}</p>
             </div>
             <div class="p-3 rounded-full bg-green-100 text-green-600">
                 <i class="fas fa-home text-2xl"></i>
@@ -35,7 +63,11 @@
         <div class="bg-white rounded-xl shadow-lg p-6 flex items-center justify-between transition-transform duration-200 hover:scale-105">
             <div>
                 <h3 class="text-gray-500 text-sm font-medium">Agents Enregistrés</h3>
-                <p class="text-3xl font-bold text-gray-900 mt-1"></p>
+                @php
+                use App\Models\User;
+                $count=User::where('role','agent')->count();
+                @endphp
+                <p class="text-3xl font-bold  text-center text-gray-900 mt-1">{{$count}}</p>
             </div>
             <div class="p-3 rounded-full bg-purple-100 text-purple-600">
                 <i class="fas fa-user-secret text-2xl"></i>
@@ -45,7 +77,11 @@
         <div class="bg-white rounded-xl shadow-lg p-6 flex items-center justify-between transition-transform duration-200 hover:scale-105">
             <div>
                 <h3 class="text-gray-500 text-sm font-medium">Visiteurs Actuellement Présents</h3>
-                <p class="text-3xl font-bold text-gray-900 mt-1"></p>
+                @php
+                use App\Models\Visiteur;
+                $presents=Visiteur::whereNull('heure_depart')->count();
+                @endphp
+                <p class="text-3xl font-bold  text-center text-gray-900 mt-1">{{$presents}}</p>
             </div>
             <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
                 <i class="fas fa-walking text-2xl"></i>
@@ -55,14 +91,14 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <div class="bg-white rounded-xl shadow-lg p-6">
-            <h3 class="text-xl font-semibold text-gray-800 mb-4">Activité des Visiteurs (7 derniers jours)</h3>
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">Activité des Visiteurs </h3>
             <div class="h-64">
                 <canvas id="weeklyVisitorsChart"></canvas>
             </div>
         </div>
 
         <div class="bg-white rounded-xl shadow-lg p-6">
-            <h3 class="text-xl font-semibold text-gray-800 mb-4">Répartition des Motifs de Visite</h3>
+            <h3 class="text-xl font-semibold text-gray-800 mb-4"></h3>
             <div class="h-64">
                 <canvas id="visitPurposeChart"></canvas>
             </div>

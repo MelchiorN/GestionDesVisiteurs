@@ -8,11 +8,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
     @push('styles')
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 @endpush
 @push('scripts')
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Crée une carte centrée par défaut
@@ -71,31 +74,63 @@
                     <li>
                         <a href="{{ route('admin.accueil') }}" class="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200
                             @if(request()->routeIs('admin.accueil')) active bg-gray-100 text-yellow-700 @endif">
-                            <i class="fas fa-tachometer-alt mr-3"></i> Tableau de bord
+                            <i class="fas fa-tachometer-alt mr-3"></i> <span>Accueil</span>
                         </a>
                     </li>
                     <li>
                         <a href="" class="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200
                            @if (request()->routeIs('')) active bg-gray-100 text-yellow-700 @endif }}">
-                            <i class="fas fa-users-cog mr-3"></i> Gestion des Utilisateurs
+                            <i class="fas fa-users-cog mr-3"></i> <span>Gestion Utilisateurs</span>
                         </a>
                     </li>
                     <li>
-                        <a href="" class="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200
-                            @if (request()->routeIs('')) active bg-gray-600 text-yellow-800 @endif">
-                            <i class="fas fa-home mr-3"></i> Gestion des Locataires
+                        <div x-data="{ open: false }" class="space-y-2">
+                        <!-- Menu principal -->
+                        <button @click="open = !open"
+                            class="w-full flex items-center px-4 py-2 text-left text-white hover:bg-gray-700 rounded-lg transition duration-200">
+                            <i class="fas fa-user-secret mr-3"></i>
+                            <span>Gestion des Agents</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto"></i>
+                        </button>
+
+                        <!-- Sous-menus, affichés seulement si open = true -->
+                        <div x-show="open" class="pl-8 mt-2 space-y-1" x-cloak>
+                            <a href="{{ route('admin.form.agent') }}"
+                            class="block px-2 py-1 rounded hover:bg-gray-700 text-white transition
+                            @if(request()->routeIs('admin.form.agent')) bg-yellow-100 text-yellow-800 @endif">
+                                <i class="fas fa-user-plus mr-3" ></i> Ajouter un agent
+                            </a>
+                            <a href="{{ route('admin.liste.agent') }}"
+                            class="block px-2 py-1 rounded hover:bg-gray-700 text-white transition
+                            @if(request()->routeIs('admin.liste.agent')) bg-yellow-100 text-yellow-800 @endif">
+                                <i class="fas fa-user-friends mr-3"> </i><span>Liste des agents</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    </li>
+                     <li>
+                        <a href="{{route('admin.create.resident')}}" class="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200
+                           @if (request()->routeIs('admin.create.resident')) active bg-gray-100 text-yellow-700 @endif }}">
+                            <i class="fas fa-user-plus mr-3"></i>  Nouveau Resident
                         </a>
                     </li>
                     <li>
-                        <a href="" class="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200
-                            @if( request()->routeIs('')) active bg-gray-100 text-yellow-800 @endif">
-                            <i class="fas fa-user-secret mr-3"></i> Gestion des Agents
+                        <a href="{{route('admin.resident')}}" class="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200
+                            @if (request()->routeIs('admin.resident')) active bg-gray-600 text-yellow-800 @endif">
+                            <i class="fas fa-home mr-3"></i> Gestion des Residents
                         </a>
                     </li>
                     <li>
-                        <a href="" class="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200
-                        @if (request()->routeIs('')) active bg-gray-100 text-yellow-800 @endif">
+                        <a href="{{route('admin.visiteurs')}}" class="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200
+                        @if (request()->routeIs('admin.visiteurs')) active bg-gray-100 text-yellow-800 @endif">
                             <i class="fas fa-user-friends mr-3"></i> Tous les Visiteurs
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('admin.statistique')}}" class="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200
+                            @if (request()->routeIs('admin.statistique')) active bg-gray-600 text-yellow-800 @endif">
+                            <i class="fa fa-chart-bar mr-3"></i> <span>Statistiques</span>
                         </a>
                     </li>
                     <li>
